@@ -4,7 +4,7 @@ class HashMap {
     capacity = 16;
     loadFactor = 0.75;
     buckets = new Array(this.capacity);
-    
+
     #entriesCount = 0;
 
     constructor() {
@@ -112,6 +112,13 @@ class HashMap {
 
     length() {
         return this.#entriesCount;
+    }
+
+    clear() {
+        for(let i = 0; i < this.capacity; i++) {
+            this.buckets[i] = new LinkedList();
+        }
+        this.#entriesCount = 0;
     }
 }
 
