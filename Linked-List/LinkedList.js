@@ -31,17 +31,17 @@ export class LinkedList {
         return count;
     }
 
-    append(value) {
+    append(key, value) {
        if(this.#head == null) {
         this.prepend(value);
         return;
        }
        
-       this.tail.nextNode = new Node(value, null);
+       this.tail.nextNode = new Node(key, value, null);
     }
     
-    prepend(value) {
-        this.#head = new Node(value, this.#head);
+    prepend(key, value) {
+        this.#head = new Node(key, value, this.#head);
     }
 
     pop() {
@@ -60,44 +60,44 @@ export class LinkedList {
         tmp.nextNode = null;
     }
 
-    contains(value) {
+    contains(key) {
         if(this.size === 0) return false;
 
         let tmp = this.#head;
         /*
         Traverser cannot go past last node, and stops if it 
-        finds the matching value.
+        finds the matching key.
         */
-        while( tmp.nextNode != null && tmp.value !== value) {
+        while( tmp.nextNode != null && tmp.key !== key) {
             tmp = tmp.nextNode;
         }
 
-        console.log("Checking: ", tmp.value);
-        return tmp.value === value;
+        console.log("Checking: ", tmp.key);
+        return tmp.key === key;
         /*
-        Case 1: Reaches last node, can't find target value
+        Case 1: Reaches last node, can't find target key
           - returns false;
-        Case 2: Reaches last node, finds target value.
+        Case 2: Reaches last node, finds target key.
           - returns true;
-        Case 3: Hasn't reached last node, finds target value.
+        Case 3: Hasn't reached last node, finds target key.
           - returns true;
         */
     }
 
-    find(value) {
+    find(key) {
         if(list.size === 0) return null;
 
         let tmp = this.#head;
         let index = 0;
 
         while(tmp.nextNode !== null ) {
-            if(tmp.value === value) return index;
+            if(tmp.key === key) return index;
 
             tmp = tmp.nextNode;
             index++;
         }
 
-        return (tmp.value === value) ? index : null;
+        return (tmp.key === key) ? index : null;
     }
 
     at(index) {
@@ -114,14 +114,14 @@ export class LinkedList {
         return tmp;
     }
 
-    insertAt(value, index) {
+    insertAt(key, value, index) {
         if(index <= 0) {
-            this.prepend(value);
+            this.prepend(key, value);
             return;
         }
 
         if(index > list.size - 1) {
-            list.append(value);
+            list.append(key, value);
             return;
         }
 
@@ -133,7 +133,7 @@ export class LinkedList {
             current = current.nextNode;
             step++;
         }
-        previous.nextNode =  new Node(value, current);
+        previous.nextNode =  new Node(key, value, current);
     }
 
     removeAt(index) {
@@ -169,10 +169,10 @@ export class LinkedList {
         if(this.#head == null) return "null";
 
         let tmp = this.#head;
-        let str = `( ${tmp.value} )`
+        let str = `(key: ${tmp.key} , value: ${tmp.value})`
         while(tmp.nextNode !== null) {
             tmp = tmp.nextNode;
-            str += ` -> ( ${tmp.value} )`;
+            str += ` -> (key: ${tmp.key} , value: ${tmp.value})`;
         }
         str += ` -> null`;
         return str;

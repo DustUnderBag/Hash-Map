@@ -25,15 +25,15 @@ class HashMap {
     }
 
     set(key, value) {
-        const hash = this.#hash(key);
-        const bucket = this.buckets[hash];
-        const pair = {hash, key,  value};
+        const hashCode = this.#hash(key);
+        const bucket = this.buckets[hashCode];
+        const pair = {hashCode, key,  value};
         console.log(pair);
         
         let tmp = bucket.head;
         //If bucket is empty.
         if(tmp == null) {
-            bucket.prepend(pair);
+            bucket.prepend(key, value);
             return;
         }
 
@@ -43,11 +43,25 @@ class HashMap {
         while(tmp.nextNode != null && tmp.value.key != key) {
             tmp = tmp.nextNode;
         }
-        if(tmp.value.key == key) {
-            tmp.value = pair;
+        if(tmp.key == key) {
+            tmp.value = value;
         } else {
-            bucket.append(pair);
+            bucket.append(key, value);
         }
+    }
+
+    get(key) {
+        const hashCode = this.#hash(key);
+        const bucket = this.buckets[hashCode];
+        
+        let tmp = bucket.head;
+        if(tmp == null) return null;
+
+        while(tmp.nextNode != null && tmp.key != key) {
+            tmp = tmp.nextNode;
+        }
+        if(tmp.key == key) return tmp.value;
+        return null;
     }
 }
 
@@ -67,7 +81,11 @@ test.set('kite', 'pink');
 test.set('lion', 'golden');
 
 test.set('elephant', 'PINK!!!!!');
+test.set("jacket", "grey");
+
 
 for(let i = 0; i < test.buckets.length; i++) {
-    console.log(test.buckets[i])
+    console.log(test.buckets[i].toString());
 }
+
+console.log(test.get("jacket"));
