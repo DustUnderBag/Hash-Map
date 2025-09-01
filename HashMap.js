@@ -4,6 +4,8 @@ class HashMap {
     capacity = 16;
     loadFactor = 0.75;
     buckets = new Array(this.capacity);
+    
+    #entriesCount = 0;
 
     constructor() {
         for(let i = 0; i < this.capacity; i++) {
@@ -40,6 +42,7 @@ class HashMap {
         //If bucket is empty.
         if(tmp == null) {
             bucket.prepend(key, value);
+            this.#entriesCount++;
             return;
         }
 
@@ -55,6 +58,7 @@ class HashMap {
         } else {
             //append new node.
             bucket.append(key, value);
+            this.#entriesCount++;
         }
     }
 
@@ -85,6 +89,7 @@ class HashMap {
         //Head is the target node
         if(bucket.head.key === key) {
             bucket.head = bucket.head.nextNode;
+            this.#entriesCount--;
             return true;
         }
 
@@ -98,10 +103,15 @@ class HashMap {
         
         if(current.key === key) {
             previous.nextNode = current.nextNode;
+            this.#entriesCount--;
             return true;
         }else {
             return false;
         }
+    }
+
+    length() {
+        return this.#entriesCount;
     }
 }
 
@@ -123,10 +133,14 @@ test.set('lion', 'golden');
 test.set('elephant', 'PINK!!!!!');
 test.set("jacket", "grey");
 
+console.log("Count: ", test.length());
 
 console.log("Remove: ", test.remove("elephant"));
-console.log("Remove: ", test.remove("hasat"));
+console.log("Remove: ", test.remove("haaat"));
 console.log("Remove: ", test.remove("grape"));
+console.log("Remove: ", test.remove("lion"));
+
+console.log("Count: ", test.length());
 
 for(let i = 0; i < test.buckets.length; i++) {
     console.log(test.buckets[i].toString());
