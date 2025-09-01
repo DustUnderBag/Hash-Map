@@ -122,7 +122,7 @@ class HashMap {
     }
 
     keys() {
-        const keys = this.buckets.reduce( (arr, bucket) => {
+        const keys = this.buckets.reduce( (acc, bucket) => {
             //On each bucket of buckets
             let tmp = bucket.head;
             const keysOfThisBucket = [];
@@ -134,10 +134,29 @@ class HashMap {
 
             /* Accumulate arr with keysOfThisBucket,
                then return it for the next iteration. */
-            return arr.concat(keysOfThisBucket);
+            return acc.concat(keysOfThisBucket);
         }, []);
 
         return keys;
+    }
+
+    values() {
+        const values = this.buckets.reduce( (acc, bucket) => {
+            //On each bucket of buckets
+            let tmp = bucket.head;
+            const valuesOfThisBucket = [];
+
+            while(tmp != null) {
+                valuesOfThisBucket.push(tmp.value);
+                tmp = tmp.nextNode;
+            }
+
+            /* Accumulate arr with valuesOfThisBucket,
+               then return it for the next iteration. */
+            return acc.concat(valuesOfThisBucket);
+        }, []);
+
+        return values;
     }
 }
 
@@ -176,3 +195,4 @@ for(let i = 0; i < test.buckets.length; i++) {
 }
 
 console.log("Keys:", test.keys());
+console.log("Values:", test.values());
