@@ -35,7 +35,7 @@ class HashMap {
         //For debugging only, can remove for production.
         const hashCode = this.#hash(key);
         const pair = {hashCode, key,  value};
-        console.log(pair);
+        //console.log(pair);
         
         const bucket = this.#getBucket(key);
         let tmp = bucket.head;
@@ -120,6 +120,25 @@ class HashMap {
         }
         this.#entriesCount = 0;
     }
+
+    keys() {
+        const keys = this.buckets.reduce( (arr, bucket) => {
+            //On each bucket of buckets
+            let tmp = bucket.head;
+            const keysOfThisBucket = [];
+
+            while(tmp != null) {
+                keysOfThisBucket.push(tmp.key);
+                tmp = tmp.nextNode;
+            }
+
+            /* Accumulate arr with keysOfThisBucket,
+               then return it for the next iteration. */
+            return arr.concat(keysOfThisBucket);
+        }, []);
+
+        return keys;
+    }
 }
 
 const test = new HashMap();
@@ -140,15 +159,20 @@ test.set('lion', 'golden');
 test.set('elephant', 'PINK!!!!!');
 test.set("jacket", "grey");
 
+
+/*
 console.log("Count: ", test.length());
+console.log("Count: ", test.length());
+*/
 
 console.log("Remove: ", test.remove("elephant"));
-console.log("Remove: ", test.remove("haaat"));
+console.log("Remove: ", test.remove("hat"));
 console.log("Remove: ", test.remove("grape"));
 console.log("Remove: ", test.remove("lion"));
 
-console.log("Count: ", test.length());
 
 for(let i = 0; i < test.buckets.length; i++) {
     console.log(test.buckets[i].toString());
 }
+
+console.log("Keys:", test.keys());
