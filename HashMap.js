@@ -63,6 +63,10 @@ class HashMap {
         if(tmp.key == key) return tmp.value;
         return null;
     }
+
+    has(key) {
+        return this.get(key) ? true : false;
+    }
 }
 
 const test = new HashMap();
@@ -89,3 +93,6 @@ for(let i = 0; i < test.buckets.length; i++) {
 }
 
 console.log(test.get("jacket"));
+
+
+console.log(test.has("ice crea"));;
