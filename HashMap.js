@@ -24,12 +24,18 @@ class HashMap {
         return hashCode;
     }
 
-    set(key, value) {
+    #getBucket(key) {
         const hashCode = this.#hash(key);
-        const bucket = this.buckets[hashCode];
+        return this.buckets[hashCode];
+    }
+
+    set(key, value) {
+        //For debugging only, can remove for production.
+        const hashCode = this.#hash(key);
         const pair = {hashCode, key,  value};
         console.log(pair);
         
+        const bucket = this.#getBucket(key);
         let tmp = bucket.head;
         //If bucket is empty.
         if(tmp == null) {
@@ -43,16 +49,17 @@ class HashMap {
         while(tmp.nextNode != null && tmp.value.key != key) {
             tmp = tmp.nextNode;
         }
+        //update value of key.
         if(tmp.key == key) {
             tmp.value = value;
         } else {
+            //append new node.
             bucket.append(key, value);
         }
     }
 
     get(key) {
-        const hashCode = this.#hash(key);
-        const bucket = this.buckets[hashCode];
+        const bucket = this.#getBucket(key);
         
         let tmp = bucket.head;
         if(tmp == null) return null;
