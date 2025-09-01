@@ -72,7 +72,8 @@ class HashMap {
     }
 
     has(key) {
-        return this.get(key) ? true : false;
+        const bucket = this.#getBucket(key);
+        return bucket.contains(key);
     }
 }
 
@@ -102,4 +103,4 @@ for(let i = 0; i < test.buckets.length; i++) {
 console.log(test.get("jacket"));
 
 
-console.log(test.has("ice crea"));;
+console.log(test.has("dog"));;
