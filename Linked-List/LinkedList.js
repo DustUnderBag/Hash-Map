@@ -7,6 +7,10 @@ export class LinkedList {
         return this.#head;
     }
 
+    set head(node) {
+        this.#head = node;
+    }
+
     get tail() {
         //Empty list
         if(this.#head == null) return null;
@@ -138,11 +142,6 @@ export class LinkedList {
 
     removeAt(index) {
         if(this.#head == null) return;
-
-        if(index <= 0) { 
-            this.#head = this.#head.nextNode;
-            return;
-        }
 
         if(index >= this.size - 1) {
             this.pop();

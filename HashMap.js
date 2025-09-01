@@ -75,6 +75,34 @@ class HashMap {
         const bucket = this.#getBucket(key);
         return bucket.contains(key);
     }
+
+    remove(key) {
+        const bucket = this.#getBucket(key);
+
+        //Empty bucket
+        if(bucket.head == null) return false;
+
+        //Head is the target node
+        if(bucket.head.key === key) {
+            bucket.head = bucket.head.nextNode;
+            return true;
+        }
+
+        let previous;
+        let current = bucket.head;
+
+        if(current.nextNode != null && current.key !== key) {
+            previous = current;
+            current = current.nextNode;
+        }
+        
+        if(current.key === key) {
+            previous.nextNode = current.nextNode;
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
 
 const test = new HashMap();
@@ -96,11 +124,10 @@ test.set('elephant', 'PINK!!!!!');
 test.set("jacket", "grey");
 
 
+console.log("Remove: ", test.remove("elephant"));
+console.log("Remove: ", test.remove("hasat"));
+console.log("Remove: ", test.remove("grape"));
+
 for(let i = 0; i < test.buckets.length; i++) {
     console.log(test.buckets[i].toString());
 }
-
-console.log(test.get("jacket"));
-
-
-console.log(test.has("dog"));;
