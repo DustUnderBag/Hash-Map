@@ -122,41 +122,48 @@ class HashMap {
     }
 
     keys() {
-        const keys = this.buckets.reduce( (acc, bucket) => {
-            //On each bucket of buckets
-            let tmp = bucket.head;
-            const keysOfThisBucket = [];
-
-            while(tmp != null) {
-                keysOfThisBucket.push(tmp.key);
-                tmp = tmp.nextNode;
-            }
-
-            /* Accumulate arr with keysOfThisBucket,
-               then return it for the next iteration. */
-            return acc.concat(keysOfThisBucket);
-        }, []);
-
-        return keys;
+        return this.#reducer("key");
     }
 
     values() {
-        const values = this.buckets.reduce( (acc, bucket) => {
+        return this.#reducer("value");
+    }
+
+    entries() {
+        return this.#reducer("key", "value");
+    }
+
+    #reducer(...properties) {
+
+        console.log("length of props", properties.length);
+        
+        const result = this.buckets.reduce( (acc, bucket) => {
             //On each bucket of buckets
             let tmp = bucket.head;
-            const valuesOfThisBucket = [];
+            const collected = [];
 
             while(tmp != null) {
-                valuesOfThisBucket.push(tmp.value);
+                //If only one property is inquired.
+                if(properties.length === 1) {
+                    collected.push(tmp[properties]);
+                } else {
+                    //If multiple properties are inquired;
+                    let comp = [];
+                    for(let property of properties) {
+                        comp.push(tmp[property]);
+                    }
+                    collected.push(comp);
+                }
+
                 tmp = tmp.nextNode;
             }
 
             /* Accumulate arr with valuesOfThisBucket,
                then return it for the next iteration. */
-            return acc.concat(valuesOfThisBucket);
+            return acc.concat(collected);
         }, []);
 
-        return values;
+        return result;
     }
 }
 
@@ -196,3 +203,4 @@ for(let i = 0; i < test.buckets.length; i++) {
 
 console.log("Keys:", test.keys());
 console.log("Values:", test.values());
+console.log("Entries:", test.entries());
