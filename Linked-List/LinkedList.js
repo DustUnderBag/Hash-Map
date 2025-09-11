@@ -76,7 +76,7 @@ export class LinkedList {
             tmp = tmp.nextNode;
         }
 
-        console.log("Checking: ", tmp.key);
+        //console.log("Checking: ", tmp.key);
         return tmp.key === key;
         /*
         Case 1: Reaches last node, can't find target key

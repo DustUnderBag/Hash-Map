@@ -3,14 +3,17 @@ import { LinkedList } from "./Linked-List/LinkedList.js";
 class HashMap {
     capacity = 16;
     loadFactor = 0.75;
-    buckets = new Array(this.capacity);
+    #entriesCount;
+    
+    constructor() {    
+        this.#entriesCount = 0;
 
-    #entriesCount = 0;
+        this.buckets = [];
 
-    constructor() {
         for(let i = 0; i < this.capacity; i++) {
             this.buckets[i] = new LinkedList();
         }
+
     }
 
     #hash(key) {
@@ -32,14 +35,11 @@ class HashMap {
     }
 
     set(key, value) {
-        //For debugging only, can remove for production.
-        const hashCode = this.#hash(key);
-        const pair = {hashCode, key,  value};
-        //console.log(pair);
-        
         const bucket = this.#getBucket(key);
         let tmp = bucket.head;
+
         //If bucket is empty.
+        //No need to check load level, as it's always just one entry after this.
         if(tmp == null) {
             bucket.prepend(key, value);
             this.#entriesCount++;
@@ -52,14 +52,21 @@ class HashMap {
         while(tmp.nextNode != null && tmp.value.key != key) {
             tmp = tmp.nextNode;
         }
-        //update value of key.
+        //update value of key for conflicting key
         if(tmp.key == key) {
             tmp.value = value;
-        } else {
-            //append new node.
-            bucket.append(key, value);
-            this.#entriesCount++;
+            return;
         }
+
+        //append new node non-conflicting key
+        bucket.append(key, value);
+        this.#entriesCount++;
+
+        /*
+        Load Factor is threshold where once number of entries exceeds it, 
+        a resize/rehashing process is triggered, hence doubling the capacity.
+        */
+        if(this.#entriesCount > this.loadFactor * this.capacity) this.#resize();
     }
 
     get(key) {
@@ -162,42 +169,60 @@ class HashMap {
 
         return result;
     }
+    
+    #resize() {
+        //save old entries for rehashing
+        const entries = this.entries();
+        
+        this.capacity = this.capacity * 2;
+        //Empty the bucket & fill buckets with linked list
+        this.buckets = [];
+        for(let i = 0; i < this.capacity; i++) {
+            this.buckets[i] = new LinkedList();
+        }
+
+        //Reset count of entries to 0
+        this.#entriesCount = 0;
+
+        //Rebuild hash table
+        for(let entry of entries) {
+            const key = entry[0];
+            const value = entry[1];
+            this.set(key, value);
+        }
+    }
 }
 
 const test = new HashMap();
 
-test.set('apple', 'red');
-test.set('banana', 'yellow');
-test.set('carrot', 'orange');
-test.set('dog', 'brown');
-test.set('elephant', 'gray');
-test.set('frog', 'green');
-test.set('grape', 'purple');
-test.set('hat', 'black');
-test.set('ice cream', 'white');
-test.set('jacket', 'blue');
-test.set('kite', 'pink');
-test.set('lion', 'golden');
-
-test.set('elephant', 'PINK!!!!!');
-test.set("jacket", "grey");
+test.set('apple', 'red')
+test.set('banana', 'yellow')
+test.set('carrot', 'orange')
+test.set('dog', 'brown')
+test.set('elephant', 'gray')
+test.set('frog', 'green')
+test.set('grape', 'purple')
+test.set('hat', 'black')
+test.set('ice cream', 'white')
+test.set('jacket', 'blue')
+test.set('kite', 'pink')
+test.set('lion', 'golden')
 
 
-/*
-console.log("Count: ", test.length());
-console.log("Count: ", test.length());
-*/
+console.log("Length: ", test.length());
+console.log("Capacity: ", test.capacity);
 
-console.log("Remove: ", test.remove("elephant"));
-console.log("Remove: ", test.remove("hat"));
-console.log("Remove: ", test.remove("grape"));
-console.log("Remove: ", test.remove("lion"));
+test.set('moon', 'silver');
 
 
-for(let i = 0; i < test.buckets.length; i++) {
-    console.log(test.buckets[i].toString());
-}
+test.set('banana', 'PP')
+test.set('grape', 'AA')
+test.set('jacket', 'OFOS')
+test.set('kite', 'SDDA')
 
-console.log("Keys:", test.keys());
-console.log("Values:", test.values());
-console.log("Entries:", test.entries());
+console.log("Length: ", test.length());
+console.log("Capacity: ", test.capacity);
+
+console.log(test.remove("lion"));
+
+console.log(test.keys());
