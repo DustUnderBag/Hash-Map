@@ -1,19 +1,12 @@
 import { LinkedList } from "./Linked-List/LinkedList.js";
 
-class HashMap {
+export class HashMap {
     capacity = 16;
     loadFactor = 0.75;
     #entriesCount;
     
     constructor() {    
-        this.#entriesCount = 0;
-
-        this.buckets = [];
-
-        for(let i = 0; i < this.capacity; i++) {
-            this.buckets[i] = new LinkedList();
-        }
-
+        this.clear();
     }
 
     #hash(key) {
@@ -122,6 +115,7 @@ class HashMap {
     }
 
     clear() {
+        this.buckets = [];
         for(let i = 0; i < this.capacity; i++) {
             this.buckets[i] = new LinkedList();
         }
@@ -176,13 +170,7 @@ class HashMap {
         
         this.capacity = this.capacity * 2;
         //Empty the bucket & fill buckets with linked list
-        this.buckets = [];
-        for(let i = 0; i < this.capacity; i++) {
-            this.buckets[i] = new LinkedList();
-        }
-
-        //Reset count of entries to 0
-        this.#entriesCount = 0;
+        this.clear();
 
         //Rebuild hash table
         for(let entry of entries) {
@@ -192,37 +180,3 @@ class HashMap {
         }
     }
 }
-
-const test = new HashMap();
-
-test.set('apple', 'red')
-test.set('banana', 'yellow')
-test.set('carrot', 'orange')
-test.set('dog', 'brown')
-test.set('elephant', 'gray')
-test.set('frog', 'green')
-test.set('grape', 'purple')
-test.set('hat', 'black')
-test.set('ice cream', 'white')
-test.set('jacket', 'blue')
-test.set('kite', 'pink')
-test.set('lion', 'golden')
-
-
-console.log("Length: ", test.length());
-console.log("Capacity: ", test.capacity);
-
-test.set('moon', 'silver');
-
-
-test.set('banana', 'PP')
-test.set('grape', 'AA')
-test.set('jacket', 'OFOS')
-test.set('kite', 'SDDA')
-
-console.log("Length: ", test.length());
-console.log("Capacity: ", test.capacity);
-
-console.log(test.remove("lion"));
-
-console.log(test.keys());
