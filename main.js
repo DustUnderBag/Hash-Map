@@ -29,11 +29,12 @@ test.set('kite', 'SDDA')
 console.log("Length: ", test.length());
 
 console.log(test.remove("lion"));
-test.clear()
 
+test.clear()
 test.set('ice cream', 'white')
 test.set('jacket', 'blue')
 test.set('kite', 'pink')
 test.set('lion', 'golden')
 
-console.log("Length: ", test.values());
+console.log("keys: ", test.keys());
+console.log("values: ", test.values());

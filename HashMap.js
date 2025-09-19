@@ -5,8 +5,13 @@ export class HashMap {
     loadFactor = 0.75;
     #entriesCount;
     
-    constructor() {    
-        this.clear();
+    constructor() {
+        this.buckets = [];
+        for(let i = 0; i < this.capacity; i++) {
+            this.buckets[i] = new LinkedList();
+        }
+        
+        this.#entriesCount = 0;
     }
 
     #hash(key) {
@@ -115,10 +120,10 @@ export class HashMap {
     }
 
     clear() {
-        this.buckets = [];
         for(let i = 0; i < this.capacity; i++) {
             this.buckets[i] = new LinkedList();
         }
+        
         this.#entriesCount = 0;
     }
 
