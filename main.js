@@ -1,4 +1,5 @@
 import { HashMap } from "./HashMap.js";
+import { HashSet } from "./HashSet.js";
 
 const test = new HashMap();
 
@@ -38,3 +39,4 @@ test.set('lion', 'golden')
 
 console.log("keys: ", test.keys());
 console.log("values: ", test.values());
+console.log("entries: ", test.entries());

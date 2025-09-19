@@ -136,34 +136,31 @@ export class HashMap {
     }
 
     entries() {
-        return this.#reducer("key", "value");
+        const keys = this.keys();
+        const values = this.values();
+        const result = [];
+        for(let i = 0; i < keys.length; i++) {
+            result.push([ keys[i], values[i]] );
+        }
+
+        return result;
     }
 
-    #reducer(...properties) {
+    //
+    #reducer(property) {
         const result = this.buckets.reduce( (acc, bucket) => {
             //On each bucket of buckets
             let tmp = bucket.head;
-            const propsOfBucket = [];
+            const collected = [];
 
             while(tmp != null) {
-                //If only one property is inquired.
-                if(properties.length === 1) {
-                    propsOfBucket.push(tmp[properties]);
-                } else {
-                    //If multiple properties are inquired;
-                    let propsOfNode = [];
-                    for(let property of properties) {
-                        propsOfNode.push(tmp[property]);
-                    }
-                    propsOfBucket.push(propsOfNode);
-                }
-
+                collected.push(tmp[property]); 
                 tmp = tmp.nextNode;
             }
 
-            /* Accumulate arr with valuesOfThisBucket,
+            /* Accumulate arr with collected,
                then return it for the next iteration. */
-            return acc.concat(propsOfBucket);
+            return acc.concat(collected);
         }, []);
 
         return result;
