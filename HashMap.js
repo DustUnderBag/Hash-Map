@@ -47,7 +47,7 @@ export class HashMap {
         //If bucket is NOT empty...
         //If it has repeated key in any node, replace its value with new value.
         //Else, append this node at the list's tail.
-        while(tmp.nextNode != null && tmp.value.key != key) {
+        while(tmp.nextNode != null && tmp.key != key) {
             tmp = tmp.nextNode;
         }
         //update value of key for conflicting key
