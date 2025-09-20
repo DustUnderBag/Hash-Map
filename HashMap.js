@@ -1,17 +1,25 @@
 import { LinkedList } from "./Linked-List/LinkedList.js";
 
 export class HashMap {
-    capacity = 16;
-    loadFactor = 0.75;
+    #capacity = 16;
+    #loadFactor = 0.75;
     #entriesCount;
     
     constructor() {
         this.buckets = [];
-        for(let i = 0; i < this.capacity; i++) {
+        for(let i = 0; i < this.#capacity; i++) {
             this.buckets[i] = new LinkedList();
         }
         
         this.#entriesCount = 0;
+    }
+
+    get capacity() {
+        return this.#capacity;
+    }
+
+    get loadFactor() {
+        return this.#loadFactor;
     }
 
     #hash(key) {
@@ -21,7 +29,7 @@ export class HashMap {
 
         for(let i = 0; i < key.length; i++) {
             hashCode = hashCode * primeNumber + key.charCodeAt(i);
-            hashCode = hashCode % this.capacity;
+            hashCode = hashCode % this.#capacity;
         }
 
         return hashCode;
@@ -64,7 +72,7 @@ export class HashMap {
         Load Factor is threshold where once number of entries exceeds it, 
         a resize/rehashing process is triggered, hence doubling the capacity.
         */
-        if(this.#entriesCount > this.loadFactor * this.capacity) this.#resize();
+        if(this.#entriesCount > this.#loadFactor * this.#capacity) this.#resize();
     }
 
     get(key) {
@@ -120,7 +128,7 @@ export class HashMap {
     }
 
     clear() {
-        for(let i = 0; i < this.capacity; i++) {
+        for(let i = 0; i < this.#capacity; i++) {
             this.buckets[i] = new LinkedList();
         }
         
@@ -146,7 +154,7 @@ export class HashMap {
         return result;
     }
 
-    //
+    //Collects all required property from every bucket, and put into an array.
     #reducer(property) {
         const result = this.buckets.reduce( (acc, bucket) => {
             //On each bucket of buckets
@@ -170,7 +178,7 @@ export class HashMap {
         //save old entries for rehashing
         const entries = this.entries();
         
-        this.capacity = this.capacity * 2;
+        this.#capacity = this.#capacity * 2;
         //Empty the bucket & fill buckets with linked list
         this.clear();
 

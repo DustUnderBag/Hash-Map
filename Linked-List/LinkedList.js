@@ -37,7 +37,7 @@ export class LinkedList {
 
     append(key, value) {
        if(this.#head == null) {
-        this.prepend(value);
+        this.prepend(key, value);
         return;
        }
        
